@@ -227,7 +227,7 @@ const LogToday = () => {
                 onChange={(e) => setNote(e.target.value)}
                 disabled={!!todayLog}
                 maxLength={140}
-                placeholder="Brief summary..."
+                placeholder="Any special or awkward moments faced today? (Max 140 chars)"
                 className="mt-1 bg-input border-border text-foreground font-mono resize-none"
                 rows={2}
               />
