@@ -80,14 +80,29 @@ export const getWeeklyStats = (logs: DailyLog[]): WeeklyStats => {
   const today = new Date();
   const weekStart = startOfWeek(today, { weekStartsOn: 1 });
   const weekEnd = endOfWeek(today, { weekStartsOn: 1 });
+  const lastWeekStart = startOfWeek(subDays(weekStart, 1), { weekStartsOn: 1 });
+  const lastWeekEnd = endOfWeek(subDays(weekStart, 1), { weekStartsOn: 1 });
 
   const weeklyLogs = logs.filter((log) => {
     const logDate = parseISO(log.date);
     return !isBefore(logDate, weekStart) && !isAfter(logDate, weekEnd);
   });
 
+  const lastWeeklyLogs = logs.filter((log) => {
+    const logDate = parseISO(log.date);
+    return !isBefore(logDate, lastWeekStart) && !isAfter(logDate, lastWeekEnd);
+  });
+
   const totalBuildHours = weeklyLogs.reduce((sum, log) => sum + log.build_hours, 0);
   const totalLearningHours = weeklyLogs.reduce((sum, log) => sum + log.learning_hours, 0);
+  const lastTotalBuildHours = lastWeeklyLogs.reduce((sum, log) => sum + log.build_hours, 0);
+
+  let weeklyDelta = 0;
+  if (lastTotalBuildHours > 0) {
+    weeklyDelta = Math.round(((totalBuildHours - lastTotalBuildHours) / lastTotalBuildHours) * 100);
+  } else if (totalBuildHours > 0) {
+    weeklyDelta = 100;
+  }
 
   let bestDay: { date: string; buildHours: number } | null = null;
   weeklyLogs.forEach((log) => {
@@ -101,6 +116,7 @@ export const getWeeklyStats = (logs: DailyLog[]): WeeklyStats => {
     totalLearningHours,
     daysLogged: weeklyLogs.length,
     bestDay,
+    weeklyDelta,
   };
 };
 
@@ -114,4 +130,31 @@ export const getExecutionScore = (log: DailyLog | undefined): number => {
   if (log.delivery_done) score++;
 
   return score;
+};
+
+export const getMovingAverage = (logs: DailyLog[], windowSize: number): { date: string; average: number }[] => {
+  const today = getToday();
+  const result: { date: string; average: number }[] = [];
+
+  for (let i = 30; i >= 0; i--) {
+    const checkDate = subDays(new Date(), i);
+    const dateStr = format(checkDate, "yyyy-MM-dd");
+
+    const windowStart = subDays(checkDate, windowSize - 1);
+    const windowLogs = logs.filter(l => {
+      const d = parseISO(l.date);
+      return !isBefore(d, windowStart) && !isAfter(d, checkDate);
+    });
+
+    const sum = windowLogs.reduce((acc, curr) => acc + curr.build_hours, 0);
+    result.push({ date: dateStr, average: sum / windowSize });
+  }
+
+  return result;
+};
+
+export const getTimeToLog = (log: DailyLog): string => {
+  if (!log.created_at) return "N/A";
+  const date = parseISO(log.created_at);
+  return format(date, "HH:mm");
 };

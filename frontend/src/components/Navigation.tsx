@@ -5,8 +5,9 @@ const Navigation = () => {
 
   const links = [
     { path: "/", label: "Dashboard" },
-    { path: "/log", label: "Log Today" },
-    { path: "/weekly", label: "Weekly Review" },
+    { path: "/log", label: "Log" },
+    { path: "/weekly", label: "Weekly" },
+    { path: "/systems", label: "Systems" },
   ];
 
   return (
@@ -21,11 +22,10 @@ const Navigation = () => {
               <Link
                 key={link.path}
                 to={link.path}
-                className={`px-4 py-2 text-xs font-mono uppercase tracking-wider transition-colors ${
-                  location.pathname === link.path
+                className={`px-4 py-2 text-xs font-mono uppercase tracking-wider transition-colors ${location.pathname === link.path
                     ? "bg-accent text-accent-foreground"
                     : "text-muted-foreground hover:text-foreground hover:bg-secondary"
-                }`}
+                  }`}
               >
                 {link.label}
               </Link>

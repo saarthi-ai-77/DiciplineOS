@@ -9,6 +9,7 @@ import LogToday from "./pages/LogToday";
 import WeeklyReview from "./pages/WeeklyReview";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
+import Systems from "./pages/Systems";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,11 @@ const App = () => (
             <Route path="/weekly" element={
               <ProtectedRoute>
                 <WeeklyReview />
+              </ProtectedRoute>
+            } />
+            <Route path="/systems" element={
+              <ProtectedRoute>
+                <Systems />
               </ProtectedRoute>
             } />
             <Route path="*" element={<NotFound />} />

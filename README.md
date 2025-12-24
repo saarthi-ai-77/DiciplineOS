@@ -14,12 +14,18 @@ DisciplineOS is a high-performance tracking system designed for individuals who 
 - **Authentication**: Secure Email/Password authentication via Supabase.
 - **Daily Logging**: Track outreach, delivery, build hours, and learning hours.
 - **Immutable Data**: Logs are immutable once saved, enforcing truth and accountability.
-- **Performance Metrics**:
-  - Current Streak
-  - Completion Rate (since start)
-  - 30-Day Consistency Heatmap
-  - Weekly Execution Chart
-- **Weekly Review**: Aggregate performance insights for the current week.
+- **Advanced Execution Metrics**: 
+  - **Weekly Delta**: Percent change in build volume vs. last week.
+  - **7-Day Moving Average**: Trend lines on execution charts.
+  - **Time-to-Log**: Performance analysis based on log submission time.
+- **Granular Project Tracking**: 
+  - Define multiple active projects.
+  - Log specific hours per project.
+  - Dedicated per-project consistency heatmaps.
+- **Custom Discipline Buffers**: Define your own binary habits (e.g., Gym, Deep Work) in a modular system.
+- **Historical Search**: Command-line style search to filter notes and recall historical execution details.
+- **30-Day Consistency Heatmap**: Visual feedback of your recent execution streak.
+- **Streak & Completion Rates**: Immediate feedback on long-term discipline.
 
 ## Getting Started
 
