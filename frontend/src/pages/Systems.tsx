@@ -78,7 +78,7 @@ const Systems = () => {
                                         variant="ghost"
                                         size="icon"
                                         onClick={() => deleteProject(project.id)}
-                                        className="text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
+                                        className="text-muted-foreground hover:text-destructive md:opacity-0 group-hover:opacity-100 transition-opacity"
                                     >
                                         <Trash2 className="h-4 w-4" />
                                     </Button>
@@ -118,7 +118,7 @@ const Systems = () => {
                                         variant="ghost"
                                         size="icon"
                                         onClick={() => deleteCustomDiscipline(disc.id)}
-                                        className="text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
+                                        className="text-muted-foreground hover:text-destructive md:opacity-0 group-hover:opacity-100 transition-opacity"
                                     >
                                         <Trash2 className="h-4 w-4" />
                                     </Button>

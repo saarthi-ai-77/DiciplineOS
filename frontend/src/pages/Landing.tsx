@@ -22,19 +22,19 @@ const Landing = () => {
             </div>
 
             {/* Hero Section */}
-            <main className="relative z-10 max-w-7xl mx-auto px-6 pt-32 pb-24">
+            <main className="relative z-10 max-w-7xl mx-auto px-6 pt-20 md:pt-32 pb-24">
                 <div className="space-y-8 max-w-4xl">
                     <div className="inline-flex items-center gap-2 px-3 py-1 bg-secondary border border-border text-xs font-mono uppercase tracking-widest text-muted-foreground animate-in fade-in slide-in-from-bottom-4 duration-500">
                         <Zap className="w-3 h-3 text-accent" />
                         V2.0.0 Live
                     </div>
 
-                    <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] uppercase animate-in fade-in slide-in-from-bottom-8 duration-700">
+                    <h1 className="text-5xl md:text-8xl font-black tracking-tighter leading-[0.9] uppercase animate-in fade-in slide-in-from-bottom-8 duration-700">
                         Discipline <br />
                         <span className="text-accent underline decoration-4 underline-offset-8">Operating</span> System
                     </h1>
 
-                    <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl font-medium leading-relaxed animate-in fade-in slide-in-from-bottom-10 duration-1000">
+                    <p className="text-lg md:text-2xl text-muted-foreground max-w-2xl font-medium leading-relaxed animate-in fade-in slide-in-from-bottom-10 duration-1000">
                         A radical framework for absolute execution. Track systems, measure output,
                         and dominate your timeline with brutalist precision.
                     </p>
@@ -115,10 +115,10 @@ const Landing = () => {
 };
 
 const FeatureCard = ({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) => (
-    <div className="bg-background p-12 border-border hover:bg-secondary/20 transition-colors group">
+    <div className="bg-background p-8 md:p-12 border-border hover:bg-secondary/20 transition-colors group">
         <div className="text-accent mb-6 group-hover:scale-110 transition-transform origin-left">{icon}</div>
-        <h3 className="text-2xl font-black uppercase tracking-tight mb-4">{title}</h3>
-        <p className="text-muted-foreground leading-relaxed">{description}</p>
+        <h3 className="text-xl md:text-2xl font-black uppercase tracking-tight mb-4">{title}</h3>
+        <p className="text-muted-foreground leading-relaxed text-sm md:text-base">{description}</p>
     </div>
 );
 

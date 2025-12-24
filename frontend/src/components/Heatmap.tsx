@@ -51,22 +51,24 @@ const Heatmap = ({ last30Days, projects = [] }: HeatmapProps) => {
         )}
       </div>
 
-      <div className="grid grid-cols-10 gap-1 mb-4">
-        {last30Days.map(({ date, log }) => {
-          const intensity = getIntensity(log);
-          const isSelected = selectedDay?.date === date;
-          return (
-            <div
-              key={date}
-              className={`aspect-square cursor-pointer transition-all border-2 ${isSelected ? "border-accent scale-105 z-10" : "border-transparent"
-                } ${intensity > 0 ? "bg-accent hover:bg-accent/80" : "bg-secondary hover:bg-secondary/80"
-                }`}
-              onMouseEnter={() => setHoveredDay({ date, log })}
-              onMouseLeave={() => setHoveredDay(null)}
-              onClick={() => setSelectedDay(isSelected ? null : { date, log })}
-            />
-          );
-        })}
+      <div className="overflow-x-auto -mx-2 px-2 pb-2">
+        <div className="grid grid-cols-10 gap-1 min-w-[300px]">
+          {last30Days.map(({ date, log }) => {
+            const intensity = getIntensity(log);
+            const isSelected = selectedDay?.date === date;
+            return (
+              <div
+                key={date}
+                className={`aspect-square cursor-pointer transition-all border-2 ${isSelected ? "border-accent scale-105 z-10" : "border-transparent"
+                  } ${intensity > 0 ? "bg-accent hover:bg-accent/80" : "bg-secondary hover:bg-secondary/80"
+                  }`}
+                onMouseEnter={() => setHoveredDay({ date, log })}
+                onMouseLeave={() => setHoveredDay(null)}
+                onClick={() => setSelectedDay(isSelected ? null : { date, log })}
+              />
+            );
+          })}
+        </div>
       </div>
 
       {activeDay && (
