@@ -1,13 +1,7 @@
-import { useState, useMemo } from "react";
-import { useDiscipline } from "@/hooks/useDiscipline";
-import Navigation from "@/components/Navigation";
-import StatusBar from "@/components/StatusBar";
-import WeeklyChart from "@/components/WeeklyChart";
-import Heatmap from "@/components/Heatmap";
-import ActionScore from "@/components/ActionScore";
-import SearchBar from "@/components/SearchBar";
-import { format, parseISO } from "date-fns";
-import { getMovingAverage, getTimeToLog } from "@/lib/discipline";
+import TerminalInput from "@/components/TerminalInput";
+import FocusTimer from "@/components/FocusTimer";
+import { toast } from "sonner";
+import { getMovingAverage, getTimeToLog, calculateXP, getRank } from "@/lib/discipline";
 
 const Dashboard = () => {
   const {
@@ -19,10 +13,59 @@ const Dashboard = () => {
     last7Days,
     last30Days,
     weeklyStats,
+    addLog,
     loading,
   } = useDiscipline();
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [cliLoading, setCliLoading] = useState(false);
+
+  const xp = useMemo(() => calculateXP(logs, streak, completionPercentage), [logs, streak, completionPercentage]);
+  const rank = useMemo(() => getRank(xp), [xp]);
+
+  const handleTimerComplete = (hours: number) => {
+    toast.success(`FOCUS SESSION COMPLETE: +${hours.toFixed(1)}HRS`);
+    // Future: Auto-fill log or update streak
+  };
+
+  const handleCommand = async (command: string) => {
+    if (command.startsWith("/log")) {
+      // Format: /log [build] [learn] "[note]"
+      const parts = command.match(/\/log\s+(\d+)\s+(\d+)\s+"(.*)"/);
+      if (!parts) {
+        toast.error('INVALID FORMAT. USE: /log [build] [learn] "[note]"');
+        return;
+      }
+
+      const build_hours = parseInt(parts[1]);
+      const learning_hours = parseInt(parts[2]);
+      const note = parts[3];
+
+      if (build_hours > 12) {
+        toast.error("EXTREME BUILD DETECTED. MAX 12H ALLOWED.");
+        return;
+      }
+
+      setCliLoading(true);
+      try {
+        await addLog({
+          build_hours,
+          learning_hours,
+          note,
+          outreach_done: build_hours > 0,
+          delivery_done: build_hours > 4,
+          custom_results: {},
+        }, []);
+        toast.success("SYSTEM SYNCHRONIZED.");
+      } catch (error) {
+        toast.error("COMMUNICATION ERROR.");
+      } finally {
+        setCliLoading(false);
+      }
+    } else {
+      toast.error("UNKNOWN COMMAND.");
+    }
+  };
 
   const filteredLogs = useMemo(() => {
     if (!searchQuery.trim()) return [];
@@ -48,7 +91,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20 md:pb-8">
       <Navigation />
 
       <main className="container mx-auto px-4 py-8 max-w-4xl">
@@ -57,7 +100,15 @@ const Dashboard = () => {
           isLoggedToday={!!todayLog}
           completionPercentage={completionPercentage}
           weeklyDelta={weeklyStats.weeklyDelta}
+          rank={rank}
         />
+
+        {!todayLog && (
+          <>
+            <FocusTimer onComplete={handleTimerComplete} />
+            <TerminalInput onCommand={handleCommand} isLoading={cliLoading} />
+          </>
+        )}
 
         <SearchBar value={searchQuery} onChange={setSearchQuery} />
 
@@ -75,7 +126,7 @@ const Dashboard = () => {
                         <span className="text-xs font-mono text-muted-foreground">
                           {format(parseISO(log.date), "MMM d, yyyy")}
                         </span>
-                        <span className="text-[10px] font-mono text-accent/60 bg-accent/5 px-1 px-1 py-0.5">
+                        <span className="text-[10px] font-mono text-accent/60 bg-accent/5 px-1 py-0.5">
                           {getTimeToLog(log)}
                         </span>
                       </div>

@@ -153,6 +153,20 @@ export const getMovingAverage = (logs: DailyLog[], windowSize: number): { date: 
   return result;
 };
 
+export const calculateXP = (logs: DailyLog[], streak: number, completionPercentage: number) => {
+  const totalBuildHours = logs.reduce((sum, log) => sum + (log.build_hours || 0), 0);
+  return Math.floor((totalBuildHours * 10) + (streak * 50) + (completionPercentage * 2));
+};
+
+export type ExecutionRank = "NOVICE" | "OPERATOR" | "ARCHITECT" | "SOVEREIGN";
+
+export const getRank = (xp: number): ExecutionRank => {
+  if (xp > 15000) return "SOVEREIGN";
+  if (xp > 5000) return "ARCHITECT";
+  if (xp > 1000) return "OPERATOR";
+  return "NOVICE";
+};
+
 export const getTimeToLog = (log: DailyLog): string => {
   if (!log.created_at) return "N/A";
   const date = parseISO(log.created_at);
