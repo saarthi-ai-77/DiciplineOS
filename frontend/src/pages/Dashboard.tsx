@@ -1,3 +1,12 @@
+import { useState, useMemo } from "react";
+import { useDiscipline } from "@/hooks/useDiscipline";
+import Navigation from "@/components/Navigation";
+import StatusBar from "@/components/StatusBar";
+import WeeklyChart from "@/components/WeeklyChart";
+import Heatmap from "@/components/Heatmap";
+import ActionScore from "@/components/ActionScore";
+import SearchBar from "@/components/SearchBar";
+import { format, parseISO } from "date-fns";
 import TerminalInput from "@/components/TerminalInput";
 import FocusTimer from "@/components/FocusTimer";
 import { toast } from "sonner";
